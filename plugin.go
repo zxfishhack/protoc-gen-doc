@@ -22,7 +22,9 @@ type PluginOptions struct {
 }
 
 // Plugin describes a protoc code generate plugin. It's an implementation of Plugin from github.com/pseudomuto/protokit
-type Plugin struct{}
+type Plugin struct {
+	Title           string
+}
 
 // Generate compiles the documentation and generates the CodeGeneratorResponse to send back to protoc. It does this
 // by rendering a template based on the options parsed from the CodeGeneratorRequest.
@@ -33,7 +35,7 @@ func (p *Plugin) Generate(r *plugin_go.CodeGeneratorRequest) (*plugin_go.CodeGen
 	}
 
 	result := excludeUnwantedProtos(protokit.ParseCodeGenRequest(r), options.ExcludePatterns)
-	template := NewTemplate(result)
+	template := NewTemplate(p.Title, result)
 
 	customTemplate := ""
 

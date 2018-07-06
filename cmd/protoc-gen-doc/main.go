@@ -27,7 +27,9 @@ func main() {
 		os.Exit(flags.Code())
 	}
 
-	if err := protokit.RunPlugin(new(gendoc.Plugin)); err != nil {
+	plugin := new(gendoc.Plugin)
+	plugin.Title = f.Title()
+	if err := protokit.RunPlugin(plugin); err != nil {
 		log.Fatal(err)
 	}
 }

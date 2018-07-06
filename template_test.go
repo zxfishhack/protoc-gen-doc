@@ -30,7 +30,7 @@ func (assert *TemplateTest) SetupSuite() {
 
 	req := utils.CreateGenRequest(set, "Booking.proto", "Vehicle.proto")
 	result := protokit.ParseCodeGenRequest(req)
-	template = gendoc.NewTemplate(result)
+	template = gendoc.NewTemplate("testTitle", result)
 	bookingFile = template.Files[0]
 	vehicleFile = template.Files[1]
 }

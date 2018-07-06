@@ -21,7 +21,7 @@ protoc --doc_out=. --doc_opt=html,index.html:google/*,somedir/* protos/*.proto
 EXAMPLE: Use a custom template
 protoc --doc_out=. --doc_opt=custom.tmpl,docs.txt protos/*.proto
 
-See https://github.com/pseudomuto/protoc-gen-doc for more details.
+See https://github.com/zxfishhack/protoc-gen-doc for more details.
 `
 
 // Version returns the currently running version of protoc-gen-doc
@@ -36,6 +36,7 @@ type Flags struct {
 	err         error
 	showHelp    bool
 	showVersion bool
+	title       string
 	writer      io.Writer
 }
 
@@ -46,6 +47,10 @@ func (f *Flags) Code() int {
 	}
 
 	return 0
+}
+
+func (f *Flags) Title() string {
+	return f.title
 }
 
 // HasMatch returns whether or not the supplied args are matches. For example, passing `--help` will match, or some
@@ -88,6 +93,7 @@ func ParseFlags(w io.Writer, args []string) *Flags {
 	f.flagSet = flag.NewFlagSet(args[0], flag.ContinueOnError)
 	f.flagSet.BoolVar(&f.showHelp, "help", false, "Show this help message")
 	f.flagSet.BoolVar(&f.showVersion, "version", false, fmt.Sprintf("Print the current version (%v)", Version()))
+	f.flagSet.StringVar(&f.title, "title", "default title", "set document title")
 	f.flagSet.SetOutput(w)
 
 	// prevent showing help on parse error

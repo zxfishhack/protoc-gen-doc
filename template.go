@@ -13,6 +13,8 @@ import (
 // Template is a type for encapsulating all the parsed files, messages, fields, enums, services, extensions, etc. into
 // an object that will be supplied to a go template.
 type Template struct {
+	// document title
+	Title string `json:"title"`
 	// The files that were parsed
 	Files []*File `json:"files"`
 	// Details about the scalar values and their respective types in supported languages.
@@ -20,12 +22,15 @@ type Template struct {
 }
 
 // NewTemplate creates a Template object from a set of descriptors.
-func NewTemplate(descs []*protokit.FileDescriptor) *Template {
+func NewTemplate(descs []*protokit.FileDescriptor, title string) *Template {
 	files := make([]*File, 0, len(descs))
 
 	for _, f := range descs {
+		comment := f.GetSyntaxComments().String()
+		
 		file := &File{
 			Name:          f.GetName(),
+			Title:         f.GetSyntaxComments().GetLeading(),
 			Description:   description(f.GetSyntaxComments().String()),
 			Package:       f.GetPackage(),
 			HasEnums:      len(f.Enums) > 0,
@@ -70,7 +75,7 @@ func NewTemplate(descs []*protokit.FileDescriptor) *Template {
 		files = append(files, file)
 	}
 
-	return &Template{Files: files, Scalars: makeScalars()}
+	return &Template{Title: title, Files: files, Scalars: makeScalars()}
 }
 
 func makeScalars() []*ScalarValue {
@@ -89,6 +94,7 @@ func makeScalars() []*ScalarValue {
 // In the case of proto3 files, HasExtensions will always be false, and Extensions will be empty.
 type File struct {
 	Name        string `json:"name"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
 	Package     string `json:"package"`
 
@@ -125,6 +131,7 @@ type FileExtension struct {
 // In the case of proto3 files, HasExtensions will always be false, and Extensions will be empty.
 type Message struct {
 	Name        string `json:"name"`
+	Title       string `json:"title"`
 	LongName    string `json:"longName"`
 	FullName    string `json:"fullName"`
 	Description string `json:"description"`
@@ -179,6 +186,7 @@ type EnumValue struct {
 // Service contains details about a service definition within a proto file.
 type Service struct {
 	Name        string           `json:"name"`
+	Title       string           `json:"title"`
 	LongName    string           `json:"longName"`
 	FullName    string           `json:"fullName"`
 	Description string           `json:"description"`
@@ -256,6 +264,7 @@ func parseFileExtension(pe *protokit.ExtensionDescriptor) *FileExtension {
 func parseMessage(pm *protokit.Descriptor) *Message {
 	msg := &Message{
 		Name:          pm.GetName(),
+		Title:         pm.GetComments().GetLeading(),
 		LongName:      pm.GetLongName(),
 		FullName:      pm.GetFullName(),
 		Description:   description(pm.GetComments().String()),
@@ -315,6 +324,7 @@ func parseMessageField(pf *protokit.FieldDescriptor) *MessageField {
 func parseService(ps *protokit.ServiceDescriptor) *Service {
 	service := &Service{
 		Name:        ps.GetName(),
+		Title:       ps.GetComments().GetLeading(),
 		LongName:    ps.GetLongName(),
 		FullName:    ps.GetFullName(),
 		Description: description(ps.GetComments().String()),

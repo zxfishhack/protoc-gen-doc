@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Protocol Documentation</title>
+    <title>{{$.Title}}</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
     <style>
@@ -166,20 +166,20 @@
 
   <body>
 
-    <h1 id="title">Protocol Documentation</h1>
+    <h1 id="title">{{$.Title}}</h1>
 
-    <h2>Table of Contents</h2>
+    <h2>目录</h2>
 
     <div id="toc-container">
       <ul id="toc">
         {{range .Files}}
           {{$file_name := .Name}}
           <li>
-            <a href="#{{.Name}}">{{.Name}}</a>
+            <a href="#{{.Name}}">{{.Title}}</a>
             <ul>
               {{range .Messages}}
                 <li>
-                  <a href="#{{.FullName}}"><span class="badge">M</span>{{.LongName}}</a>
+                  <a href="#{{.FullName}}"><span class="badge">M</span>{{.Title}}</a>
                 </li>
               {{end}}
               {{range .Enums}}
@@ -194,31 +194,31 @@
               {{end}}
               {{range .Services}}
                 <li>
-                  <a href="#{{.FullName}}"><span class="badge">S</span>{{.Name}}</a>
+                  <a href="#{{.FullName}}"><span class="badge">S</span>{{.Title}}</a>
                 </li>
               {{end}}
             </ul>
           </li>
         {{end}}
-        <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+        <li><a href="#scalar-value-types">类型对应</a></li>
       </ul>
     </div>
 
     {{range .Files}}
       {{$file_name := .Name}}
       <div class="file-heading">
-        <h2 id="{{.Name}}">{{.Name}}</h2><a href="#title">Top</a>
+        <h2 id="{{.Name}}">{{.Title}}&nbsp;[{{.Name}}]</h2><a href="#title">Top</a>
       </div>
       {{p .Description}}
 
       {{range .Messages}}
-        <h3 id="{{.FullName}}">{{.LongName}}</h3>
+        <h3 id="{{.FullName}}">{{.Title}}&nbsp;[{{.LongName}}]</h3>
         {{p .Description}}
 
         {{if .HasFields}}
           <table class="field-table">
             <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+              <tr><td>字段</td><td>类型</td><td>标签</td><td>描述</td></tr>
             </thead>
             <tbody>
               {{range .Fields}}
@@ -226,7 +226,7 @@
                   <td>{{.Name}}</td>
                   <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
                   <td>{{.Label}}</td>
-                  <td><p>{{.Description}} {{if .DefaultValue}}Default: {{.DefaultValue}}{{end}}</p></td>
+                  <td><p>{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}</p></td>
                 </tr>
               {{end}}
             </tbody>
@@ -237,7 +237,7 @@
           <br>
           <table class="extension-table">
             <thead>
-              <tr><td>Extension</td><td>Type</td><td>Base</td><td>Number</td><td>Description</td></tr>
+              <tr><td>扩展</td><td>类型</td><td>Base</td><td>Number</td><td>描述</td></tr>
             </thead>
             <tbody>
               {{range .Extensions}}
@@ -246,7 +246,7 @@
                   <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
                   <td><a href="#{{.ContainingFullType}}">{{.ContainingLongType}}</a></td>
                   <td>{{.Number}}</td>
-                  <td><p>{{.Description}}{{if .DefaultValue}} Default: {{.DefaultValue}}{{end}}</p></td>
+                  <td><p>{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}</p></td>
                 </tr>
               {{end}}
             </tbody>
@@ -294,11 +294,11 @@
       {{end}}
 
       {{range .Services}}
-        <h3 id="{{.FullName}}">{{.Name}}</h3>
+        <h3 id="{{.FullName}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
         {{p .Description}}
         <table class="enum-table">
           <thead>
-            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+            <tr><td>接口</td><td>请求类型</td><td>响应类型</td><td>描述</td></tr>
           </thead>
           <tbody>
             {{range .Methods}}
@@ -314,10 +314,10 @@
       {{end}}
     {{end}}
 
-    <h2 id="scalar-value-types">Scalar Value Types</h2>
+    <h2 id="scalar-value-types">类型对应</h2>
     <table class="scalar-value-types-table">
       <thead>
-        <tr><td>.proto Type</td><td>Notes</td><td>C++ Type</td><td>Java Type</td><td>Python Type</td></tr>
+        <tr><td>.proto类型</td><td>备注</td><td>C++类型</td><td>Java类型</td></tr>
       </thead>
       <tbody>
         {{range .Scalars}}
@@ -326,7 +326,6 @@
             <td>{{.Notes}}</td>
             <td>{{.CppType}}</td>
             <td>{{.JavaType}}</td>
-            <td>{{.PythonType}}</td>
           </tr>
         {{end}}
       </tbody>
