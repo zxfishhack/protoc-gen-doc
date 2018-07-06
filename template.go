@@ -111,7 +111,7 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 				} else {
 					sm.HasRequestMessage = false
 				}
-				if m, ok := msgDefined[sm.ResponseMessage]; ok {
+				if m, ok := msgDefined[sm.ResponseFullType]; ok {
 					sm.ResponseMessage = m
 					sm.HasResponseMessage = true
 				} else {
