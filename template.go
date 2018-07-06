@@ -21,6 +21,16 @@ type Template struct {
 	Scalars []*ScalarValue `json:"scalarValueTypes"`
 }
 
+func titleFromLeading(comment, def string) string {
+	c := strings.Split(strings.Replace(comment, "\n", "\r", -1), "\r")
+	for l := range c {
+		if c[l] != "" {
+			return c[l]
+		}
+	}
+	return def
+}
+
 // NewTemplate creates a Template object from a set of descriptors.
 func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 	files := make([]*File, 0, len(descs))
@@ -28,7 +38,7 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 	for _, f := range descs {
 		file := &File{
 			Name:          f.GetName(),
-			Title:         f.GetSyntaxComments().GetLeading(),
+			Title:         titleFromLeading(f.GetSyntaxComments().GetLeading(), f.GetName()),
 			Description:   description(f.GetSyntaxComments().String()),
 			Package:       f.GetPackage(),
 			HasEnums:      len(f.Enums) > 0,
@@ -262,7 +272,7 @@ func parseFileExtension(pe *protokit.ExtensionDescriptor) *FileExtension {
 func parseMessage(pm *protokit.Descriptor) *Message {
 	msg := &Message{
 		Name:          pm.GetName(),
-		Title:         pm.GetComments().GetLeading(),
+		Title:         titleFromLeading(pm.GetComments().GetLeading(), pm.GetName()),
 		LongName:      pm.GetLongName(),
 		FullName:      pm.GetFullName(),
 		Description:   description(pm.GetComments().String()),
@@ -322,7 +332,7 @@ func parseMessageField(pf *protokit.FieldDescriptor) *MessageField {
 func parseService(ps *protokit.ServiceDescriptor) *Service {
 	service := &Service{
 		Name:        ps.GetName(),
-		Title:       ps.GetComments().GetLeading(),
+		Title:       titleFromLeading(ps.GetComments().GetLeading(), ps.GetName()),
 		LongName:    ps.GetLongName(),
 		FullName:    ps.GetFullName(),
 		Description: description(ps.GetComments().String()),
