@@ -24,8 +24,9 @@ type Template struct {
 func titleFromLeading(comment, def string) string {
 	c := strings.Split(strings.Replace(comment, "\n", "\r", -1), "\r")
 	for l := range c {
-		if strings.Replace(strings.Replace(c[l]," ", "", -1), "*", "", -1) != "" {
-			return c[l]
+		title := strings.Trim(c[l], "*/\\ ")
+		if title != "" {
+			return title
 		}
 	}
 	return def
