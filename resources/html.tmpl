@@ -31,6 +31,12 @@
         border-bottom: 1px solid #aaa;
         padding-bottom: 0.5ex;
       }
+	  
+	  h4 {
+        font-weight: normal;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+      }
 
       a {
         text-decoration: none;
@@ -176,6 +182,7 @@
           {{$file_name := .Name}}
           <li>
             <a href="#{{.Name}}">{{.Title}}</a>
+			{{$service_name := .Name}}
             <ul>
               {{range .Messages}}
                 <li>
@@ -195,12 +202,19 @@
               {{range .Services}}
                 <li>
                   <a href="#{{.FullName}}"><span class="badge">S</span>{{.Title}}</a>
+				  <ul>
+					{{range .Methods}}
+						<li>
+						  <a href="#{{$file_name}}.{{$service_name}}.{{.Name}}"><span class="badge">F</span>{{.Title}}</a>
+						</li>
+					{{end}}
+				  </ul>
                 </li>
               {{end}}
             </ul>
           </li>
         {{end}}
-        <li><a href="#scalar-value-types">类型对应</a></li>
+        <li><a href="#scalar-value-types">基础类型对应</a></li>
       </ul>
     </div>
 
@@ -259,7 +273,7 @@
         {{p .Description}}
         <table class="enum-table">
           <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+            <tr><td>枚举名</td><td>取值</td><td>描述</td></tr>
           </thead>
           <tbody>
             {{range .Values}}
@@ -295,22 +309,118 @@
 
       {{range .Services}}
         <h3 id="{{.FullName}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
+		{{$service_name := .Name}}
         {{p .Description}}
         <table class="enum-table">
           <thead>
-            <tr><td>接口</td><td>请求类型</td><td>响应类型</td><td>描述</td></tr>
+            <tr><td>接口</td><td>请求类型</td><td>响应类型</td></tr>
           </thead>
           <tbody>
             {{range .Methods}}
               <tr>
-                <td>{{.Name}}</td>
+                <td><a href="#{{$file_name}}.{{$service_name}}.{{.Name}}">{{.Title}}</a></td>
                 <td><a href="#{{.RequestFullType}}">{{.RequestLongType}}</a></td>
                 <td><a href="#{{.ResponseFullType}}">{{.ResponseLongType}}</a></td>
-                <td><p>{{.Description}}</p></td>
               </tr>
             {{end}}
           </tbody>
         </table>
+		{{range .Methods}}
+			<h3 id="{{$file_name}}.{{$service_name}}.{{.Name}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
+			{{p .Description}}
+			
+			{{if .HasRequestMessage}}
+			{{$m := .RequestMessage}}
+				<h4>请求类型:&nbsp;{{$m.Title}}&nbsp;[{{$m.FullName}}]</h4>
+				{{p $m.Description}}
+
+				{{if $m.HasFields}}
+				  <table class="field-table">
+					<thead>
+					  <tr><td>字段</td><td>类型</td><td>标签</td><td>描述</td></tr>
+					</thead>
+					<tbody>
+					  {{range $m.Fields}}
+						<tr>
+						  <td>{{.Name}}</td>
+						  <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
+						  <td>{{.Label}}</td>
+						  <td><p>{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}</p></td>
+						</tr>
+					  {{end}}
+					</tbody>
+				  </table>
+				{{end}}
+				{{if $m.HasExtensions}}
+				  <br>
+				  <table class="extension-table">
+					<thead>
+					  <tr><td>扩展</td><td>类型</td><td>Base</td><td>Number</td><td>描述</td></tr>
+					</thead>
+					<tbody>
+					  {{range $m.Extensions}}
+						<tr>
+						  <td>{{.Name}}</td>
+						  <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
+						  <td><a href="#{{.ContainingFullType}}">{{.ContainingLongType}}</a></td>
+						  <td>{{.Number}}</td>
+						  <td><p>{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}</p></td>
+						</tr>
+					  {{end}}
+					</tbody>
+				  </table>
+				{{end}}
+			{{else}}
+				<h4>请求类型:&nbsp;{{.RequestLongType}}</h4>
+				<span>类型未找到</span>
+			{{end}}
+			
+			{{if .HasResponseMessage}}
+			{{$m := .ResponseMessage}}
+				<h4>响应类型:&nbsp;{{$m.Title}}&nbsp;[{{$m.FullName}}]</h4>
+				{{p $m.Description}}
+
+				{{if $m.HasFields}}
+				  <table class="field-table">
+					<thead>
+					  <tr><td>字段</td><td>类型</td><td>标签</td><td>描述</td></tr>
+					</thead>
+					<tbody>
+					  {{range $m.Fields}}
+						<tr>
+						  <td>{{.Name}}</td>
+						  <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
+						  <td>{{.Label}}</td>
+						  <td><p>{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}</p></td>
+						</tr>
+					  {{end}}
+					</tbody>
+				  </table>
+				{{end}}
+				{{if $m.HasExtensions}}
+				  <br>
+				  <table class="extension-table">
+					<thead>
+					  <tr><td>扩展</td><td>类型</td><td>Base</td><td>Number</td><td>描述</td></tr>
+					</thead>
+					<tbody>
+					  {{range $m.Extensions}}
+						<tr>
+						  <td>{{.Name}}</td>
+						  <td><a href="#{{.FullType}}">{{.LongType}}</a></td>
+						  <td><a href="#{{.ContainingFullType}}">{{.ContainingLongType}}</a></td>
+						  <td>{{.Number}}</td>
+						  <td><p>{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}</p></td>
+						</tr>
+					  {{end}}
+					</tbody>
+				  </table>
+				{{end}}
+			{{else}}
+				<h4>响应类型:&nbsp;{{.ResponseLongType}}</h4>
+				<span>类型未找到</span>
+			{{end}}
+		{{end}}
       {{end}}
     {{end}}
 

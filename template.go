@@ -39,6 +39,8 @@ func titleFromLeading(comment, def string) string {
 // NewTemplate creates a Template object from a set of descriptors.
 func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 	files := make([]*File, 0, len(descs))
+	
+	msgDefined := make(map[string]*Message)
 
 	for _, f := range descs {
 		if strings.Contains(f.GetSyntaxComments().GetLeading(), IGNORE_KEY) {
@@ -72,6 +74,7 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 			if mi == nil {
 				continue
 			}
+			msgDefined[mi.FullName] = mi
 			file.Messages = append(file.Messages, parseMessage(m))
 
 			for _, n := range m.Messages {
@@ -90,13 +93,32 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 		for _, s := range f.Services {
 			file.Services = append(file.Services, parseService(s))
 		}
-
+		
 		sort.Sort(file.Enums)
 		sort.Sort(file.Extensions)
 		sort.Sort(file.Messages)
 		sort.Sort(file.Services)
 
 		files = append(files, file)
+	}
+	
+	for _, f := range files {
+		for _, s := range f.Services {
+			for _, sm := range s.Methods {
+				if m, ok := msgDefined[sm.RequestFullType]; ok {
+					sm.RequestMessage = m
+					sm.HasRequestMessage = true
+				} else {
+					sm.HasRequestMessage = false
+				}
+				if m, ok := msgDefined[sm.responseMessage]; ok {
+					sm.ResponseMessage = m
+					sm.HasResponseMessage = true
+				} else {
+					sm.HasResponseMessage = false
+				}
+			}
+		}
 	}
 
 	return &Template{Title: title, Files: files, Scalars: makeScalars()}
@@ -220,13 +242,18 @@ type Service struct {
 // ServiceMethod contains details about an individual method within a service.
 type ServiceMethod struct {
 	Name             string `json:"name"`
+	Title            string `json:"name"`
 	Description      string `json:"description"`
 	RequestType      string `json:"requestType"`
 	RequestLongType  string `json:"requestLongType"`
 	RequestFullType  string `json:"requestFullType"`
+	RequestMessage   *orderedMessages   `json:"requestMessage"`
 	ResponseType     string `json:"responseType"`
 	ResponseLongType string `json:"responseLongType"`
 	ResponseFullType string `json:"responseFullType"`
+	ResponseMessage  *orderedMessages   `json:"responseMessage"`
+	HasRequestMessage bool   `json:"hasRequestMessage"`
+	HasResponseMessage bool   `json:"hasResponseMessage"`
 }
 
 // ScalarValue contains information about scalar value types in protobuf. The common use case for this type is to know
@@ -367,6 +394,7 @@ func parseService(ps *protokit.ServiceDescriptor) *Service {
 func parseServiceMethod(pm *protokit.MethodDescriptor) *ServiceMethod {
 	return &ServiceMethod{
 		Name:             pm.GetName(),
+		Title:            titleFromLeading(pm.GetComments().GetLeading(), pm.GetName()),
 		Description:      description(pm.GetComments().String()),
 		RequestType:      baseName(pm.GetInputType()),
 		RequestLongType:  strings.TrimPrefix(pm.GetInputType(), "."+pm.GetPackage()+"."),
