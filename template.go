@@ -21,6 +21,10 @@ type Template struct {
 	Scalars []*ScalarValue `json:"scalarValueTypes"`
 }
 
+const (
+	IGNORE_KEY string = "---ignored---"
+)
+
 func titleFromLeading(comment, def string) string {
 	c := strings.Split(strings.Replace(comment, "\n", "\r", -1), "\r")
 	for l := range c {
@@ -37,6 +41,9 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 	files := make([]*File, 0, len(descs))
 
 	for _, f := range descs {
+		if strings.Contains(f.GetSyntaxComments().GetLeading(), IGNORE_KEY) {
+			continue
+		}
 		file := &File{
 			Name:          f.GetName(),
 			Title:         titleFromLeading(f.GetSyntaxComments().GetLeading(), f.GetName()),
@@ -61,9 +68,17 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 		}
 
 		for _, m := range f.Messages {
+			mi := parseMessage(m)
+			if mi == nil {
+				continue
+			}
 			file.Messages = append(file.Messages, parseMessage(m))
 
 			for _, n := range m.Messages {
+				ni := parseMessage(n)
+				if ni == nil {
+					continue
+				}
 				file.Messages = append(file.Messages, parseMessage(n))
 			}
 
@@ -271,6 +286,9 @@ func parseFileExtension(pe *protokit.ExtensionDescriptor) *FileExtension {
 }
 
 func parseMessage(pm *protokit.Descriptor) *Message {
+	if strings.Contains(pm.GetComments().String(), IGNORE_KEY) {
+		return nil
+	}
 	msg := &Message{
 		Name:          pm.GetName(),
 		Title:         titleFromLeading(pm.GetComments().GetLeading(), pm.GetName()),
