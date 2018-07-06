@@ -14,12 +14,12 @@
 package main
 
 import (
-	"github.com/pseudomuto/protokit"
+	"github.com/zxfishhack/protokit"
 
 	"log"
 	"os"
 
-	"github.com/pseudomuto/protoc-gen-doc"
+	"github.com/zxfishhack/protoc-gen-doc"
 )
 
 func main() {
