@@ -10,7 +10,7 @@
 //
 //     protoc --doc_out=. --doc_opt=custom.tmpl,docs.txt protos/*.proto
 //
-// For more details, check out the README at https://github.com/pseudomuto/protoc-gen-doc
+// For more details, check out the README at https://github.com/zxfishhack/protoc-gen-doc
 package main
 
 import (
@@ -23,12 +23,12 @@ import (
 )
 
 func main() {
-	plugin := new(gendoc.Plugin)
 	if flags := ParseFlags(os.Stdout, os.Args); HandleFlags(flags) {
 		os.Exit(flags.Code())
-	} else {
-		plugin.Title = flags.Title()
 	}
+
+	plugin := new(gendoc.Plugin)
+	plugin.Title = f.Title()
 	if err := protokit.RunPlugin(plugin); err != nil {
 		log.Fatal(err)
 	}

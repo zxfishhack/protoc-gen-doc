@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/pseudomuto/protoc-gen-doc"
+	"github.com/zxfishhack/protoc-gen-doc"
 )
 
 type PluginTest struct {
