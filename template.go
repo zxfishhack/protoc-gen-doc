@@ -385,13 +385,20 @@ func parseService(ps *protokit.ServiceDescriptor) *Service {
 	}
 
 	for _, sm := range ps.Methods {
-		service.Methods = append(service.Methods, parseServiceMethod(sm))
+		m := parseServiceMethod(sm)
+		if m == nil {
+			continue
+		}
+		service.Methods = append(service.Methods, m)
 	}
 
 	return service
 }
 
 func parseServiceMethod(pm *protokit.MethodDescriptor) *ServiceMethod {
+	if strings.Contains(pm.GetComments().GetLeading(), IGNORE_KEY) {
+		return nil
+	}
 	return &ServiceMethod{
 		Name:             pm.GetName(),
 		Title:            titleFromLeading(pm.GetComments().GetLeading(), pm.GetName()),
