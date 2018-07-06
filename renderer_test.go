@@ -1,14 +1,14 @@
 package gendoc_test
 
 import (
-	"github.com/pseudomuto/protokit"
-	"github.com/pseudomuto/protokit/utils"
+	"github.com/zxfishhack/protokit"
+	"github.com/zxfishhack/protokit/utils"
 	"github.com/stretchr/testify/suite"
 
 	"os"
 	"testing"
 
-	"github.com/pseudomuto/protoc-gen-doc"
+	"github.com/zxfishhack/protoc-gen-doc"
 )
 
 const tempTestDir = "./tmp"
