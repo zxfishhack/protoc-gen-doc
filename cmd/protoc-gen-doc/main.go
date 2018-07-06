@@ -25,12 +25,12 @@ import (
 func main() {
 	if flags := ParseFlags(os.Stdout, os.Args); HandleFlags(flags) {
 		os.Exit(flags.Code())
-	}
-
-	plugin := new(gendoc.Plugin)
-	plugin.Title = f.Title()
-	if err := protokit.RunPlugin(plugin); err != nil {
-		log.Fatal(err)
+	} else {
+		plugin := new(gendoc.Plugin)
+		plugin.Title = f.Title()
+		if err := protokit.RunPlugin(plugin); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
