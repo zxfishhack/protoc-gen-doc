@@ -247,11 +247,11 @@ type ServiceMethod struct {
 	RequestType      string `json:"requestType"`
 	RequestLongType  string `json:"requestLongType"`
 	RequestFullType  string `json:"requestFullType"`
-	RequestMessage   *orderedMessages   `json:"requestMessage"`
+	RequestMessage   *Message   `json:"requestMessage"`
 	ResponseType     string `json:"responseType"`
 	ResponseLongType string `json:"responseLongType"`
 	ResponseFullType string `json:"responseFullType"`
-	ResponseMessage  *orderedMessages   `json:"responseMessage"`
+	ResponseMessage  *Message   `json:"responseMessage"`
 	HasRequestMessage bool   `json:"hasRequestMessage"`
 	HasResponseMessage bool   `json:"hasResponseMessage"`
 }
