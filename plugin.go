@@ -121,7 +121,7 @@ func ParseOptions(req *plugin_go.CodeGeneratorRequest) (*PluginOptions, error) {
 	options.TemplateFile = parts[0]
 	options.OutputFile = path.Base(parts[1])
 	if len(parts) == 3 {
-		options.Title = parts[2]
+		options.Title = strings.Trim(parts[2], " '\"")
 	}
 
 	renderType, err := NewRenderType(options.TemplateFile)
