@@ -26,8 +26,6 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 	files := make([]*File, 0, len(descs))
 
 	for _, f := range descs {
-		comment := f.GetSyntaxComments().String()
-		
 		file := &File{
 			Name:          f.GetName(),
 			Title:         f.GetSyntaxComments().GetLeading(),
