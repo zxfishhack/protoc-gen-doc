@@ -18,13 +18,12 @@ type PluginOptions struct {
 	Type            RenderType
 	TemplateFile    string
 	OutputFile      string
+	Title           string
 	ExcludePatterns []*regexp.Regexp
 }
 
 // Plugin describes a protoc code generate plugin. It's an implementation of Plugin from github.com/zxfishhack/protokit
-type Plugin struct {
-	Title           string
-}
+type Plugin struct {}
 
 // Generate compiles the documentation and generates the CodeGeneratorResponse to send back to protoc. It does this
 // by rendering a template based on the options parsed from the CodeGeneratorRequest.
@@ -35,7 +34,7 @@ func (p *Plugin) Generate(r *plugin_go.CodeGeneratorRequest) (*plugin_go.CodeGen
 	}
 
 	result := excludeUnwantedProtos(protokit.ParseCodeGenRequest(r), options.ExcludePatterns)
-	template := NewTemplate(p.Title, result)
+	template := NewTemplate(options.Title, result)
 
 	customTemplate := ""
 
@@ -89,6 +88,7 @@ func ParseOptions(req *plugin_go.CodeGeneratorRequest) (*PluginOptions, error) {
 		Type:         RenderTypeHTML,
 		TemplateFile: "",
 		OutputFile:   "index.html",
+		Title:        "default title",
 	}
 
 	params := req.GetParameter()
@@ -114,12 +114,15 @@ func ParseOptions(req *plugin_go.CodeGeneratorRequest) (*PluginOptions, error) {
 	}
 
 	parts := strings.Split(params, ",")
-	if len(parts) != 2 {
+	if len(parts) != 2 && len(parts) != 3 {
 		return nil, fmt.Errorf("Invalid parameter: %s", params)
 	}
 
 	options.TemplateFile = parts[0]
 	options.OutputFile = path.Base(parts[1])
+	if len(parts) == 3 {
+		options.Title = parts[2]
+	}
 
 	renderType, err := NewRenderType(options.TemplateFile)
 	if err == nil {
