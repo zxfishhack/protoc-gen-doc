@@ -182,7 +182,6 @@
           {{$file_name := .Name}}
           <li>
             <a href="#{{.Name}}">{{.Title}}</a>
-			{{$service_name := .Name}}
             <ul>
               {{range .Messages}}
                 <li>
@@ -200,12 +199,13 @@
                 </li>
               {{end}}
               {{range .Services}}
+			    {{$service_name := .FullName}}
                 <li>
                   <a href="#{{.FullName}}"><span class="badge">S</span>{{.Title}}</a>
 				  <ul>
 					{{range .Methods}}
 						<li>
-						  <a href="#{{$file_name}}.{{$service_name}}.{{.Name}}"><span class="badge">F</span>{{.Title}}</a>
+						  <a href="#{{$service_name}}.{{.Name}}"><span class="badge">F</span>{{.Title}}</a>
 						</li>
 					{{end}}
 				  </ul>
@@ -309,7 +309,7 @@
 
       {{range .Services}}
         <h3 id="{{.FullName}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
-		{{$service_name := .Name}}
+		{{$service_name := .FullName}}
         {{p .Description}}
         <table class="enum-table">
           <thead>
@@ -318,7 +318,7 @@
           <tbody>
             {{range .Methods}}
               <tr>
-                <td><a href="#{{$file_name}}.{{$service_name}}.{{.Name}}">{{.Title}}</a></td>
+                <td><a href="#{{$service_name}}.{{.Name}}">{{.Title}}</a></td>
                 <td><a href="#{{.RequestFullType}}">{{.RequestLongType}}</a></td>
                 <td><a href="#{{.ResponseFullType}}">{{.ResponseLongType}}</a></td>
               </tr>
@@ -326,7 +326,7 @@
           </tbody>
         </table>
 		{{range .Methods}}
-			<h3 id="{{$file_name}}.{{$service_name}}.{{.Name}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
+			<h3 id="{{$service_name}}.{{.Name}}">{{.Title}}&nbsp;[{{.Name}}]</h3>
 			{{p .Description}}
 			
 			{{if .HasRequestMessage}}
