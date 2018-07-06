@@ -22,7 +22,7 @@ type Template struct {
 }
 
 // NewTemplate creates a Template object from a set of descriptors.
-func NewTemplate(title, stringdescs []*protokit.FileDescriptor) *Template {
+func NewTemplate(title string, stringdescs []*protokit.FileDescriptor) *Template {
 	files := make([]*File, 0, len(descs))
 
 	for _, f := range descs {
