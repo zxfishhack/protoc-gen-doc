@@ -91,10 +91,64 @@
 {{range .Methods}}
 <a name="{{$service_name}}.{{.Name}}"/>
 
-### {{.Title}} {{.Name}}
+### {{.Title}} ({{.Name}})
+{{.Description}}
+	
+{{if .HasRequestMessage}}
+{{$m := .RequestMessage}}
 
-{{end}}
+#### 请求类型: {{$m.Title}} ({{$m.FullName}})
 
+{{$m.Description}}
+
+{{if $m.HasFields}}
+| 字段 | 类型 | 标签 | 描述 |
+| ---- | ---- | ---- | ---- |
+{{range $m.Fields -}}
+|{{.Name}}|[{{.LongType}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
+{{end}} 
+{{end}} <!-- end HasFields -->
+
+{{if $m.HasExtensions}}
+| 扩展 | 类型 | Base | Number | 描述 |
+| ---- | ---- | ---- | ------ | ---- |
+{{range $m.Extensions -}}
+|{{.Name}}|[{{.LongType}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
+{{end}} 
+{{end}} <!-- end HasExtensions -->
+{{else}}
+#### 请求类型: {{.RequestLongType}}
+	类型未找到
+{{end}} <!-- end HasRequestMessage -->
+
+
+{{if .HasResponseMessage}}
+{{$m := .ResponseMessage}}
+
+#### 请求类型: {{$m.Title}} ({{$m.FullName}})
+
+{{$m.Description}}
+
+{{if $m.HasFields}}
+| 字段 | 类型 | 标签 | 描述 |
+| ---- | ---- | ---- | ---- |
+{{range $m.Fields -}}
+|{{.Name}}|[{{.LongType}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
+{{end}} 
+{{end}} <!-- end HasFields -->
+
+{{if $m.HasExtensions}}
+| 扩展 | 类型 | Base | Number | 描述 |
+| ---- | ---- | ---- | ------ | ---- |
+{{range $m.Extensions -}}
+|{{.Name}}|[{{.LongType}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
+{{end}} 
+{{end}} <!-- end HasExtensions -->
+{{else}}
+#### 请求类型: {{.RequestLongType}}
+	类型未找到
+{{end}} <!-- end HasResponseMessage -->
+{{end}} <!-- end range method -->
 {{end}} <!-- end services -->
 
 {{end}}
