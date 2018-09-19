@@ -12,7 +12,7 @@
   {{end}}
   {{range .Services}}  - [{{.Title}}](#{{.FullName}})
   {{$service_name := .FullName}}
-  {{range .Methods}}  - [{{.Title}}](#{{$service_name}}.{{.Name}})
+  {{range .Methods}}    - [{{.Title}}](#{{$service_name}}.{{.Name}})
   {{end}}
   {{end}}
 {{end}}
