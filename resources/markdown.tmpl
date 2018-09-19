@@ -11,9 +11,9 @@
   {{range .Extensions}}  - [File-level Extensions](#{{$file_name}}-extensions)
   {{end}}
   {{range .Services}}  - [{{.Title}}](#{{.FullName}})
-    {{$service_name := .FullName}}
-    {{range .Methods}}  - [{{.Title}}](#{{$service_name}}.{{.Name}})
-	{{end}}
+  {{$service_name := .FullName}}
+  {{range .Methods}}  - [{{.Title}}](#{{$service_name}}.{{.Name}})
+  {{end}}
   {{end}}
 {{end}}
 - [基础类型定义](#scalar-value-types)
