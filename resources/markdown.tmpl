@@ -13,8 +13,7 @@
   {{range .Services}}    1. [{{.Title}}](#{{.FullName}})
   {{$service_name := .FullName}}
   {{range .Methods}}        1. [{{.Title}}](#{{$service_name}}.{{.Name}})
-  {{end}}
-  {{end}}
+  {{end}}{{end}}
 {{end}}
 1. [基础类型定义](#scalar-value-types)
 
@@ -24,12 +23,14 @@
 <p align="right"><a href="#top">Top</a></p>
 
 ## {{.Title}} ({{.Name}})
+
 {{.Description}}
 
 {{range .Messages}}
 <a name="{{.FullName}}"/>
 
 ### {{.Title}} {{.LongName}}
+
 {{.Description}}
 
 {{if .HasFields}}
@@ -54,6 +55,7 @@
 <a name="{{.FullName}}"/>
 
 ### {{.LongName}}
+
 {{.Description}}
 
 | 名称 | 取值 | 描述 |
@@ -67,9 +69,10 @@
 {{if .HasExtensions}}
 <a name="{{$file_name}}-extensions"/>
 
-### File-level Extensions
-| Extension | Type | Base | Number | Description |
-| --------- | ---- | ---- | ------ | ----------- |
+### 文件级别扩展
+
+| 扩展 | 类型 | Base | Number | 描述 |
+| ---- | ---- | ---- | ------ | ---- |
 {{range .Extensions -}}
 | {{.Name}} | {{.Type}} | {{.ContainingLongType}} | {{.Number}} | {{mdbr .Description}}{{if .DefaultValue}} Default: `{{.DefaultValue}}`{{end}} |
 {{end}}
@@ -80,18 +83,20 @@
 <a name="{{.FullName}}"/>
 
 ### {{.Title}} {{.Name}}
+
 {{.Description}}
 
 | 接口 | 请求类型 | 响应类型 | 描述 |
 | ---- | -------- | -------- | -----|
 {{range .Methods -}}
-  | [{{.Title}} ({{.Name}})](#{{$service_name}}.{{.Name}}) | [{{.RequestType}}](#{{.RequestType}}) | [{{.ResponseType}}](#{{.RequestFullType}}) | {{mdbr .Description}} |
+  | [{{.Title}} ({{.Name}})](#{{$service_name}}.{{.Name}}) | [{{.RequestType}}](#{{.RequestFullType}}) | [{{.ResponseType}}](#{{.RequestFullType}}) | {{mdbr .Description}} |
 {{end}}
 
 {{range .Methods}}
 <a name="{{$service_name}}.{{.Name}}"/>
 
 ### {{.Title}} ({{.Name}})
+
 {{.Description}}
 	
 {{if .HasRequestMessage}}
@@ -118,7 +123,8 @@
 {{end}} <!-- end HasExtensions -->
 {{else}}
 #### 请求类型: {{.RequestType}}
-	类型未找到
+
+`类型未找到`
 {{end}} <!-- end HasRequestMessage -->
 
 
@@ -146,7 +152,8 @@
 {{end}} <!-- end HasExtensions -->
 {{else}}
 #### 请求类型: {{.RequestLongType}}
-	类型未找到
+
+`类型未找到`
 {{end}} <!-- end HasResponseMessage -->
 {{end}} <!-- end range method -->
 {{end}} <!-- end services -->
