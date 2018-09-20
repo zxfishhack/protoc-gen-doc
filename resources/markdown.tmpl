@@ -24,14 +24,14 @@
 
 ## {{.Title}} ({{.Name}})
 
-{{.Description}}
+{{mdbr .Description}}
 
 {{range .Messages}}
 <a name="{{.FullName}}"/>
 
 ### {{.Title}} {{.LongName}}
 
-{{.Description}}
+{{mdbr .Description}}
 
 {{if .HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
@@ -56,7 +56,7 @@
 
 ### {{.LongName}}
 
-{{.Description}}
+{{mdbr .Description}}
 
 | 名称 | 取值 | 描述 |
 | ---- | ---- | ---- |
@@ -84,7 +84,7 @@
 
 ### {{.Title}} {{.Name}}
 
-{{.Description}}
+{{mdbr .Description}}
 
 | 接口 | 请求类型 | 响应类型 | 描述 |
 | ---- | -------- | -------- | -----|
@@ -97,14 +97,14 @@
 
 ### {{.Title}} ({{.Name}})
 
-{{.Description}}
+{{mdbr .Description}}
 	
 {{if .HasRequestMessage}}
 {{$m := .RequestMessage}}
 
 #### 请求类型: {{$m.Title}} ({{$m.Name}})
 
-{{$m.Description}}
+{{mdbr $m.Description}}
 
 {{if $m.HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
@@ -133,7 +133,7 @@
 
 #### 请求类型: {{$m.Title}} ({{$m.Name}})
 
-{{$m.Description}}
+{{mdbr $m.Description}}
 
 {{if $m.HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
