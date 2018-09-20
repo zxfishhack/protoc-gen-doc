@@ -25,6 +25,12 @@ func ParaFilter(content string) string {
 	return fmt.Sprintf("<para>%s</para>", strings.Join(paragraphs, "</para><para>"))
 }
 
+// MDBrFilter splites the content by new lines and postfix each on with \\.
+func MDBrFilter(content string) string {
+	paragraphs := paraPattern.Split(content, -1)
+	return strings.Join(paragraphs, "\\\\")
+}
+
 // NoBrFilter removes single CR and LF from content.
 func NoBrFilter(content string) string {
 	normalized := strings.Replace(content, "\r\n", "\n", -1)
