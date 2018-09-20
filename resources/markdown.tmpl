@@ -3,20 +3,20 @@
 
 ## 目录
 {{range .Files}}
-{{$file_name := .Name}}- [{{.Title}}](#{{.Name}})
-  {{range .Messages}}  - [{{.Title}}](#{{.FullName}})
+{{$file_name := .Name}}1. [{{.Title}}](#{{.Name}})
+  {{range .Messages}}    1. [{{.Title}}](#{{.FullName}})
   {{end}}
-  {{range .Enums}}  - [{{.LongName}}](#{{.FullName}})
+  {{range .Enums}}    1. [{{.LongName}}](#{{.FullName}})
   {{end}}
-  {{range .Extensions}}  - [File-level Extensions](#{{$file_name}}-extensions)
+  {{range .Extensions}}    1. [File-level Extensions](#{{$file_name}}-extensions)
   {{end}}
-  {{range .Services}}  - [{{.Title}}](#{{.FullName}})
+  {{range .Services}}    1. [{{.Title}}](#{{.FullName}})
   {{$service_name := .FullName}}
-  {{range .Methods}}    - [{{.Title}}](#{{$service_name}}.{{.Name}})
+  {{range .Methods}}        1. [{{.Title}}](#{{$service_name}}.{{.Name}})
   {{end}}
   {{end}}
 {{end}}
-- [基础类型定义](#scalar-value-types)
+1. [基础类型定义](#scalar-value-types)
 
 {{range .Files}}
 {{$file_name := .Name}}
@@ -36,7 +36,7 @@
 | 字段 | 类型 | 标签 | 描述 |
 | ---- | ---- | ---- | ---- |
 {{range .Fields -}}
-  | {{.Name}} | [{{.LongType}}](#{{.FullType}}) | {{.Label}} | {{nobr .Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}} |
+  | {{.Name}} | [{{.Type}}](#{{.FullType}}) | {{.Label}} | {{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}} |
 {{end}}
 {{end}}
 
@@ -44,7 +44,7 @@
 | 扩展 | 类型 | Base | Number | 描述 |
 | ---- | ---- | ---- | ------ | ---- |
 {{range .Extensions -}}
-  | {{.Name}} | {{.LongType}} | {{.ContainingLongType}} | {{.Number}} | {{nobr .Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}} |
+  | {{.Name}} | {{.Type}} | {{.ContainingLongType}} | {{.Number}} | {{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}} |
 {{end}}
 {{end}}
 
@@ -59,7 +59,7 @@
 | 名称 | 取值 | 描述 |
 | ---- | ---- | ---- |
 {{range .Values -}}
-  | {{.Name}} | {{.Number}} | {{nobr .Description}} |
+  | {{.Name}} | {{.Number}} | {{.Description}} |
 {{end}}
 
 {{end}} <!-- end enums -->
@@ -71,7 +71,7 @@
 | Extension | Type | Base | Number | Description |
 | --------- | ---- | ---- | ------ | ----------- |
 {{range .Extensions -}}
-  | {{.Name}} | {{.LongType}} | {{.ContainingLongType}} | {{.Number}} | {{nobr .Description}}{{if .DefaultValue}} Default: `{{.DefaultValue}}`{{end}} |
+  | {{.Name}} | {{.Type}} | {{.ContainingLongType}} | {{.Number}} | {{.Description}}{{if .DefaultValue}} Default: `{{.DefaultValue}}`{{end}} |
 {{end}}
 {{end}} <!-- end HasExtensions -->
 
@@ -85,7 +85,7 @@
 | 接口 | 请求类型 | 响应类型 | 描述 |
 | ---- | -------- | -------- | -----|
 {{range .Methods -}}
-  | [{{.Name}}](#{{$service_name}}.{{.Name}}) | [{{.RequestLongType}}](#{{.RequestFullType}}) | [{{.ResponseLongType}}](#{{.RequestFullType}}) | {{nobr .Description}} |
+  | [{{.Name}}](#{{$service_name}}.{{.Name}}) | [{{.RequestLongType}}](#{{.RequestFullType}}) | [{{.ResponseLongType}}](#{{.RequestFullType}}) | {{.Description}} |
 {{end}}
 
 {{range .Methods}}
@@ -105,7 +105,7 @@
 | 字段 | 类型 | 标签 | 描述 |
 | ---- | ---- | ---- | ---- |
 {{range $m.Fields -}}
-|{{.Name}}|[{{.LongType}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
+|{{.Name}}|[{{.Type}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
 {{end}} 
 {{end}} <!-- end HasFields -->
 
@@ -113,7 +113,7 @@
 | 扩展 | 类型 | Base | Number | 描述 |
 | ---- | ---- | ---- | ------ | ---- |
 {{range $m.Extensions -}}
-|{{.Name}}|[{{.LongType}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
+|{{.Name}}|[{{.Type}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
 {{end}} 
 {{end}} <!-- end HasExtensions -->
 {{else}}
@@ -133,7 +133,7 @@
 | 字段 | 类型 | 标签 | 描述 |
 | ---- | ---- | ---- | ---- |
 {{range $m.Fields -}}
-|{{.Name}}|[{{.LongType}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
+|{{.Name}}|[{{.Type}}](#{{.FullType}})|{{.Label}}|{{.Description}} {{if .DefaultValue}}默认值: {{.DefaultValue}}{{end}}|
 {{end}} 
 {{end}} <!-- end HasFields -->
 
@@ -141,7 +141,7 @@
 | 扩展 | 类型 | Base | Number | 描述 |
 | ---- | ---- | ---- | ------ | ---- |
 {{range $m.Extensions -}}
-|{{.Name}}|[{{.LongType}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
+|{{.Name}}|[{{.Type}}](#{{.FullType}})|[{{.ContainingLongType}}](#{{.ContainingFullType}})|{{.Number}}|{{.Description}}{{if .DefaultValue}} 默认值: {{.DefaultValue}}{{end}}|
 {{end}} 
 {{end}} <!-- end HasExtensions -->
 {{else}}
