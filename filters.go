@@ -29,7 +29,7 @@ func ParaFilter(content string) string {
 // MDBrFilter splites the content by new lines and postfix each one with <br/>.
 func MDBrFilter(content string) string {
 	paragraphs := paraPattern.Split(content, -1)
-	return strings.Join(paragraphs, "<br/>")
+	return strings.Replace(strings.Join(paragraphs, "<br/>"),"<br/>^", "<br/>", -1)
 }
 
 // MDBlockFilter splites the content by new lines and prefix each one with \t except start with ^
