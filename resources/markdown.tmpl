@@ -2,18 +2,19 @@
 <a name="top"/>
 
 ## 目录
-{{range .Files}}
-{{$file_name := .Name}}1. [{{.Title}}](#{{.Name}})
-  {{range .Messages}}    1. [{{.Title}}](#{{.FullName}})
-  {{end}}
-  {{range .Enums}}    1. [{{.LongName}}](#{{.FullName}})
-  {{end}}
-  {{range .Extensions}}    1. [File-level Extensions](#{{$file_name}}-extensions)
-  {{end}}
-  {{range .Services}}    1. [{{.Title}}](#{{.FullName}})
-  {{$service_name := .FullName}}
-  {{range .Methods}}        1. [{{.Title}}](#{{$service_name}}.{{.Name}})
-  {{end}}{{end}}
+{{- range .Files}}
+{{$file_name := .Name}}
+1. [{{.Title}}](#{{.Name}})
+{{range .Messages}}	1. [{{.Title}}](#{{.FullName}})
+{{end}}
+{{range .Enums}}	1. [{{.LongName}}](#{{.FullName}})
+{{end}}
+{{range .Extensions}}	1. [File-level Extensions](#{{$file_name}}-extensions)
+{{end}}
+{{range .Services}}	1. [{{.Title}}](#{{.FullName}})
+{{$service_name := .FullName}}
+{{range .Methods}}		1. [{{.Title}}](#{{$service_name}}.{{.Name}})
+{{end}}{{end}}
 {{end}}
 1. [基础类型定义](#scalar-value-types)
 
@@ -22,16 +23,16 @@
 <a name="{{.Name}}"/>
 <p align="right"><a href="#top">Top</a></p>
 
-## {{.Title}} ({{.Name}})
+## {{.Title}} 
 
-{{mdbr .Description}}
+{{mdbl .Description}}
 
 {{range .Messages}}
 <a name="{{.FullName}}"/>
 
-### {{.Title}} {{.LongName}}
+### {{.Title}} 
 
-{{mdbr .Description}}
+{{mdbl .Description}}
 
 {{if .HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
@@ -56,7 +57,7 @@
 
 ### {{.LongName}}
 
-{{mdbr .Description}}
+{{mdbl .Description}}
 
 | 名称 | 取值 | 描述 |
 | ---- | ---- | ---- |
@@ -84,7 +85,7 @@
 
 ### {{.Title}} {{.Name}}
 
-{{mdbr .Description}}
+{{mdbl .Description}}
 
 | 接口 | 请求类型 | 响应类型 | 描述 |
 | ---- | -------- | -------- | -----|
@@ -97,14 +98,14 @@
 
 ### {{.Title}} ({{.Name}})
 
-{{mdbr .Description}}
+{{mdbl .Description}}
 	
 {{if .HasRequestMessage}}
 {{$m := .RequestMessage}}
 
 #### 请求类型: {{$m.Title}} ({{$m.Name}})
 
-{{mdbr $m.Description}}
+{{mdbl $m.Description}}
 
 {{if $m.HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
@@ -133,7 +134,7 @@
 
 #### 请求类型: {{$m.Title}} ({{$m.Name}})
 
-{{mdbr $m.Description}}
+{{mdbl $m.Description}}
 
 {{if $m.HasFields}}
 | 字段 | 类型 | 标签 | 描述 |
