@@ -100,10 +100,10 @@
 
 {{mdbl .Description}}
 
-| 接口 | 请求类型 | 响应类型 | 描述 |
-| ---- | -------- | -------- | -----|
+| 接口 | 请求类型 | 响应类型 |
+| ---- | -------- | -------- | 
 {{range .Methods -}}
-  | [{{.Title}} ({{.Name}})](#{{$service_name}}.{{.Name}}) | [{{.RequestType}}](#{{.RequestFullType}}) | [{{.ResponseType}}](#{{.RequestFullType}}) | {{mdbr .Description}} |
+  | [{{.Title}} ({{.Name}})](#{{$service_name}}.{{.Name}}) | [{{.RequestType}}](#{{.RequestFullType}}) | [{{.ResponseType}}](#{{.RequestFullType}}) |
 {{end}}
 
 {{range .Methods}}
