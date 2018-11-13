@@ -333,7 +333,10 @@ func parseMessage(pm *protokit.Descriptor) *Message {
 	}
 
 	for _, f := range pm.Fields {
-		msg.Fields = append(msg.Fields, parseMessageField(f))
+		fd := parseMessageField(f)
+		if fd != nil {
+			msg.Fields = append(msg.Fields, fd)
+		}
 	}
 
 	return msg
@@ -351,9 +354,14 @@ func parseMessageExtension(pe *protokit.ExtensionDescriptor) *MessageExtension {
 func parseMessageField(pf *protokit.FieldDescriptor) *MessageField {
 	t, lt, ft := parseType(pf)
 
+	desc := description(pf.GetComments().String())
+	if strings.Contains(desc, IGNORE_KEY) {
+		return nil
+	}
+
 	m := &MessageField{
 		Name:         pf.GetName(),
-		Description:  description(pf.GetComments().String()),
+		Description:  desc,
 		Label:        labelName(pf.GetLabel(), pf.IsProto3()),
 		Type:         t,
 		LongType:     lt,
