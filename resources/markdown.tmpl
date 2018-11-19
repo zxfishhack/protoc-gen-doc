@@ -7,16 +7,13 @@
 {{- range .Files}}
 {{$file_name := .Name}}
 1. [{{.Title}}](#{{.Name}})
-{{range .Messages}}	1. [{{.Title}}](#{{.FullName}})
-{{end}}
-{{range .Enums}}	1. [{{.LongName}}](#{{.FullName}})
-{{end}}
-{{range .Extensions}}	1. [File-level Extensions](#{{$file_name}}-extensions)
-{{end}}
+{{range .Messages}}	1. [{{.Title}}](#{{.FullName}}){{end}}
+{{range .Enums}}	1. [{{.LongName}}](#{{.FullName}}){{end}}
+{{range .Extensions}}	1. [File-level Extensions](#{{$file_name}}-extensions){{end}}
 {{range .Services}}	1. [{{.Title}}](#{{.FullName}})
 {{$service_name := .FullName}}
-{{range .Methods}}		1. [{{.Title}}](#{{$service_name}}.{{.Name}})
-{{end}}{{end}}
+{{range .Methods}}		1. [{{.Title}}](#{{$service_name}}.{{.Name}}){{end}}
+{{end}}
 {{end}}
 1. [基础类型定义](#scalar-value-types)
 
