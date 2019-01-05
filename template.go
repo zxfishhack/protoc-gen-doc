@@ -101,7 +101,7 @@ func NewTemplate(title string, descs []*protokit.FileDescriptor) *Template {
 
 		files = append(files, file)
 	}
-	
+
 	for _, f := range files {
 		for _, s := range f.Services {
 			for _, sm := range s.Methods {
